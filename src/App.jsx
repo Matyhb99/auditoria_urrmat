@@ -22,21 +22,27 @@ import sqliImg from './Informe_A/img_urrmat/sqli_urrmat.png'
 import xssImg from './Informe_A/img_urrmat/xss_urrmat.png'
 import comandosImg from './Informe_A/img_urrmat/comandos_urrmat.png'
 
+// Mapa de imágenes por nombre de archivo
+const imagenes = {
+  'sqli_urrmat.png': sqliImg,
+  'xss_urrmat.png': xssImg,
+  'comandos_urrmat.png': comandosImg,
+}
+
 const secciones = [
-  { id: 'resumen',     label: '01 Resumen',         contenido: resumen,      img: null },
-  { id: 'sqli',        label: '02 SQL Injection',    contenido: sqli,         img: sqliImg },
-  { id: 'xss',         label: '03 XSS',              contenido: xss,          img: xssImg },
-  { id: 'comandos',    label: '04 Cmd Injection',    contenido: comandos,     img: comandosImg },
-  { id: 'activos',     label: '05 Activos',          contenido: activos,      img: null },
-  { id: 'matriz',      label: '06 Matriz de Riesgo', contenido: matriz,       img: null },
-  { id: 'controles',   label: '07 Controles',        contenido: controles,    img: null },
-  { id: 'recuperacion',label: '08 Recuperación',     contenido: recuperacion, img: null },
-  { id: 'prompts',     label: '09 Bitácora IA',      contenido: prompts,      img: null },
+  { id: 'resumen',      label: '01 Resumen',         contenido: resumen },
+  { id: 'sqli',         label: '02 SQL Injection',    contenido: sqli },
+  { id: 'xss',          label: '03 XSS',              contenido: xss },
+  { id: 'comandos',     label: '04 Cmd Injection',    contenido: comandos },
+  { id: 'activos',      label: '05 Activos',          contenido: activos },
+  { id: 'matriz',       label: '06 Matriz de Riesgo', contenido: matriz },
+  { id: 'controles',    label: '07 Controles',        contenido: controles },
+  { id: 'recuperacion', label: '08 Recuperación',     contenido: recuperacion },
+  { id: 'prompts',      label: '09 Bitácora IA',      contenido: prompts },
 ]
 
 function App() {
   const [activa, setActiva] = useState('resumen')
-
   const seccionActual = secciones.find(s => s.id === activa)
 
   return (
@@ -92,47 +98,42 @@ function App() {
           padding: '40px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
         }}>
-
-          {/* Imagen del ataque si corresponde */}
-          {seccionActual.img && (
-            <div style={{ marginBottom: '32px' }}>
-              <img
-                src={seccionActual.img}
-                alt={`Captura ${seccionActual.label}`}
-                style={{ width: '100%', borderRadius: '6px', border: '1px solid #ddd' }}
-              />
-              <p style={{ fontSize: '12px', color: '#666', textAlign: 'center', marginTop: '6px' }}>
-                Captura del ataque — {seccionActual.label}
-              </p>
-            </div>
-          )}
-
-          {/* Markdown */}
           <div style={{ lineHeight: '1.7', color: '#333' }}>
             <ReactMarkdown
               components={{
-                h1: ({node, ...props}) => <h1 style={{ color: '#1a1a2e', borderBottom: '2px solid #cba6f7', paddingBottom: '8px' }} {...props} />,
-                h2: ({node, ...props}) => <h2 style={{ color: '#313244', marginTop: '32px' }} {...props} />,
-                h3: ({node, ...props}) => <h3 style={{ color: '#45475a' }} {...props} />,
-                table: ({node, ...props}) => (
+                // Resolver imágenes desde el mapa
+                img: ({ src, alt }) => {
+                  const nombreArchivo = src.split('/').pop()
+                  const srcResuelto = imagenes[nombreArchivo] || src
+                  return (
+                    <img
+                      src={srcResuelto}
+                      alt={alt}
+                      style={{ width: '100%', borderRadius: '6px', border: '1px solid #ddd', margin: '16px 0' }}
+                    />
+                  )
+                },
+                h1: ({ node, ...props }) => <h1 style={{ color: '#1a1a2e', borderBottom: '2px solid #cba6f7', paddingBottom: '8px' }} {...props} />,
+                h2: ({ node, ...props }) => <h2 style={{ color: '#313244', marginTop: '32px' }} {...props} />,
+                h3: ({ node, ...props }) => <h3 style={{ color: '#45475a' }} {...props} />,
+                table: ({ node, ...props }) => (
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: '14px' }} {...props} />
                   </div>
                 ),
-                th: ({node, ...props}) => <th style={{ background: '#1e1e2e', color: '#cdd6f4', padding: '8px 12px', textAlign: 'left' }} {...props} />,
-                td: ({node, ...props}) => <td style={{ border: '1px solid #ddd', padding: '8px 12px' }} {...props} />,
-                tr: ({node, ...props}) => <tr style={{ borderBottom: '1px solid #eee' }} {...props} />,
-                code: ({node, inline, ...props}) => inline
+                th: ({ node, ...props }) => <th style={{ background: '#1e1e2e', color: '#cdd6f4', padding: '8px 12px', textAlign: 'left' }} {...props} />,
+                td: ({ node, ...props }) => <td style={{ border: '1px solid #ddd', padding: '8px 12px' }} {...props} />,
+                tr: ({ node, ...props }) => <tr style={{ borderBottom: '1px solid #eee' }} {...props} />,
+                code: ({ node, inline, ...props }) => inline
                   ? <code style={{ background: '#f0f0f0', padding: '2px 6px', borderRadius: '4px', fontSize: '13px', color: '#e64553' }} {...props} />
                   : <code style={{ display: 'block', background: '#1e1e2e', color: '#cdd6f4', padding: '16px', borderRadius: '6px', overflowX: 'auto', fontSize: '13px', lineHeight: '1.5' }} {...props} />,
-                pre: ({node, ...props}) => <pre style={{ background: '#1e1e2e', borderRadius: '6px', padding: '0', margin: '16px 0' }} {...props} />,
-                blockquote: ({node, ...props}) => <blockquote style={{ borderLeft: '4px solid #cba6f7', margin: '16px 0', padding: '8px 16px', background: '#f5f0ff', color: '#555' }} {...props} />,
+                pre: ({ node, ...props }) => <pre style={{ background: '#1e1e2e', borderRadius: '6px', padding: '0', margin: '16px 0' }} {...props} />,
+                blockquote: ({ node, ...props }) => <blockquote style={{ borderLeft: '4px solid #cba6f7', margin: '16px 0', padding: '8px 16px', background: '#f5f0ff', color: '#555' }} {...props} />,
               }}
             >
               {seccionActual.contenido}
             </ReactMarkdown>
           </div>
-
         </div>
       </main>
     </div>
