@@ -30,7 +30,7 @@ El portal de clientes de EnergíaViva permite consultar el historial de consumo 
 
 ![SQLi](img_urrmat/sqli_urrmat.png)
 
-*Figura 1: Resultado del ataque SQLi en DVWA — se exponen todos los registros de usuarios de la base de datos.*
+*Figura 1: Resultado del ataque SQLi en DVWA — que se exponen todos los registros de usuarios de la base de datos.*
 
 ### Resultado observado
 
