@@ -22,64 +22,132 @@ import sqliImg from './Informe_A/img_urrmat/sqli_urrmat.png'
 import xssImg from './Informe_A/img_urrmat/xss_urrmat.png'
 import comandosImg from './Informe_A/img_urrmat/comandos_urrmat.png'
 
-// Mapa de imágenes por nombre de archivo
 const imagenes = {
   'sqli_urrmat.png': sqliImg,
   'xss_urrmat.png': xssImg,
   'comandos_urrmat.png': comandosImg,
 }
 
-const secciones = [
-  { id: 'resumen',      label: '01 Resumen',         contenido: resumen },
-  { id: 'sqli',         label: '02 SQL Injection',    contenido: sqli },
-  { id: 'xss',          label: '03 XSS',              contenido: xss },
-  { id: 'comandos',     label: '04 Cmd Injection',    contenido: comandos },
-  { id: 'activos',      label: '05 Activos',          contenido: activos },
-  { id: 'matriz',       label: '06 Matriz de Riesgo', contenido: matriz },
-  { id: 'controles',    label: '07 Controles',        contenido: controles },
-  { id: 'recuperacion', label: '08 Recuperación',     contenido: recuperacion },
-  { id: 'prompts',      label: '09 Bitácora IA',      contenido: prompts },
+const grupos = [
+  {
+    grupo: 'Informe A — Vulnerabilidades',
+    secciones: [
+      { id: 'resumen',   label: '01 Resumen',      contenido: resumen },
+      { id: 'sqli',      label: '02 SQL Injection', contenido: sqli },
+      { id: 'xss',       label: '03 XSS',           contenido: xss },
+      { id: 'comandos',  label: '04 Cmd Injection', contenido: comandos },
+    ]
+  },
+  {
+    grupo: 'Informe B — Matriz de Riesgo',
+    secciones: [
+      { id: 'activos',      label: '05 Activos',          contenido: activos },
+      { id: 'matriz',       label: '06 Matriz de Riesgo', contenido: matriz },
+      { id: 'controles',    label: '07 Controles',        contenido: controles },
+      { id: 'recuperacion', label: '08 Recuperación',     contenido: recuperacion },
+    ]
+  },
+  {
+    grupo: 'Transversal',
+    secciones: [
+      { id: 'prompts', label: '09 Bitácora IA', contenido: prompts },
+    ]
+  },
 ]
+
+// Aplanar todas las secciones para buscar por id
+const todasLasSecciones = grupos.flatMap(g => g.secciones)
 
 function App() {
   const [activa, setActiva] = useState('resumen')
-  const seccionActual = secciones.find(s => s.id === activa)
+  const [abiertos, setAbiertos] = useState({
+    'Informe A — Vulnerabilidades': true,
+    'Informe B — Matriz de Riesgo': true,
+    'Transversal': true,
+  })
+
+  const seccionActual = todasLasSecciones.find(s => s.id === activa)
+
+  const toggleGrupo = (nombre) => {
+    setAbiertos(prev => ({ ...prev, [nombre]: !prev[nombre] }))
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'sans-serif' }}>
 
       {/* Sidebar */}
       <nav style={{
-        width: '220px',
-        minWidth: '220px',
+        width: '240px',
+        minWidth: '240px',
         background: '#1e1e2e',
         padding: '20px 0',
         display: 'flex',
         flexDirection: 'column',
-        gap: '4px'
+        gap: '2px'
       }}>
-        <div style={{ color: '#cdd6f4', fontWeight: 'bold', padding: '0 16px 16px', fontSize: '14px', borderBottom: '1px solid #313244' }}>
+        {/* Encabezado */}
+        <div style={{
+          color: '#cdd6f4',
+          fontWeight: 'bold',
+          padding: '0 16px 16px',
+          fontSize: '14px',
+          borderBottom: '1px solid #313244',
+          marginBottom: '8px'
+        }}>
           ⚡ EnergíaViva<br />
           <span style={{ fontWeight: 'normal', fontSize: '12px', color: '#a6adc8' }}>Auditoría E22</span>
         </div>
 
-        {secciones.map(s => (
-          <button
-            key={s.id}
-            onClick={() => setActiva(s.id)}
-            style={{
-              background: activa === s.id ? '#313244' : 'transparent',
-              color: activa === s.id ? '#cba6f7' : '#cdd6f4',
-              border: 'none',
-              textAlign: 'left',
-              padding: '10px 16px',
-              cursor: 'pointer',
-              fontSize: '13px',
-              borderLeft: activa === s.id ? '3px solid #cba6f7' : '3px solid transparent',
-            }}
-          >
-            {s.label}
-          </button>
+        {/* Grupos colapsables */}
+        {grupos.map(g => (
+          <div key={g.grupo}>
+            {/* Cabecera del grupo */}
+            <button
+              onClick={() => toggleGrupo(g.grupo)}
+              style={{
+                width: '100%',
+                background: 'transparent',
+                border: 'none',
+                color: '#89b4fa',
+                textAlign: 'left',
+                padding: '8px 16px',
+                cursor: 'pointer',
+                fontSize: '11px',
+                fontWeight: 'bold',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              {g.grupo}
+              <span style={{ fontSize: '10px' }}>{abiertos[g.grupo] ? '▲' : '▼'}</span>
+            </button>
+
+            {/* Secciones del grupo */}
+            {abiertos[g.grupo] && g.secciones.map(s => (
+              <button
+                key={s.id}
+                onClick={() => setActiva(s.id)}
+                style={{
+                  width: '100%',
+                  background: activa === s.id ? '#313244' : 'transparent',
+                  color: activa === s.id ? '#cba6f7' : '#cdd6f4',
+                  border: 'none',
+                  textAlign: 'left',
+                  padding: '9px 16px 9px 28px',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  borderLeft: activa === s.id ? '3px solid #cba6f7' : '3px solid transparent',
+                }}
+              >
+                {s.label}
+              </button>
+            ))}
+
+            <div style={{ height: '8px' }} />
+          </div>
         ))}
       </nav>
 
@@ -101,7 +169,6 @@ function App() {
           <div style={{ lineHeight: '1.7', color: '#333' }}>
             <ReactMarkdown
               components={{
-                // Resolver imágenes desde el mapa
                 img: ({ src, alt }) => {
                   const nombreArchivo = src.split('/').pop()
                   const srcResuelto = imagenes[nombreArchivo] || src
