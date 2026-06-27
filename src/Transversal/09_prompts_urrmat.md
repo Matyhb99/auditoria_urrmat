@@ -13,7 +13,7 @@
 ### Sección 1 — Resumen (01_resumen_urrmat.md)
 
 **Prompt utilizado:**
-> "Necesito redactar el archivo 01_resumen para mi auditoría de seguridad web. Mi empresa asignada es E22 — EnergíaViva, del rubro eléctrico / servicios básicos. El portal de clientes custodia datos de clientes (RUT, consumo eléctrico, datos de pago). Genera un resumen ejecutivo que describa la empresa, el portal, los datos que custodia y el impacto potencial de una brecha de seguridad en el contexto de una empresa eléctrica en Chile, considerando la regulación de la SEC y la Ley 19.628."
+> "Necesito redactar el archivo 01_resumen para mi auditoría de seguridad web. Mi empresa asignada es EnergíaViva (es una empresa ficticia), que tiene rubro de eléctrico y servicios básicos. El portal de clientes custodia datos de clientes (RUT, consumo eléctrico, datos de pago). Genera un resumen ejecutivo que describa la empresa, el portal, los datos que custodia y el impacto potencial de una brecha de seguridad en el contexto de una empresa eléctrica en Chile, considerando la regulación de la SEC y la Ley 19.628."
 
 **Qué acepté:** La estructura general del resumen, la descripción del portal y las funcionalidades típicas de un portal eléctrico, la tabla de datos custodiados y el impacto en el negocio con marco regulatorio chileno.
 
@@ -65,7 +65,7 @@
 ### Secciones 5–8 — Activos, Matriz, Controles y Recuperación
 
 **Prompt utilizado (ejemplo para matriz):**
-> "Redacta el archivo 06_matriz para EnergíaViva (eléctrica/servicios básicos). Usa metodología probabilidad × impacto (escala 1-5, resultado 1-25). Identifica al menos 10 riesgos derivados de las tres vulnerabilidades auditadas (SQLi, XSS, Command Injection) y del contexto específico de una empresa eléctrica (infraestructura crítica, SCADA, regulación SEC). Para cada riesgo indica: activo afectado, vulnerabilidad que lo origina, P, I, R=P×I y nivel de riesgo (Bajo/Medio/Alto/Crítico con colores). Incluye un mapa de calor ASCII y tabla de priorización. Los riesgos deben conectarse con los IDs de activos del archivo 05_activos."
+> "Redacta el archivo 06_matriz para EnergíaViva (eléctrica/servicios básicos). Usa metodología probabilidad × impacto (escala 1-5, resultado 1-25). Que dentificas al menos 10 riesgos derivados de las tres vulnerabilidades auditadas (ya que solo pude encontrar 4) (SQLi, XSS, Command Injection) y del contexto específico de una empresa eléctrica (infraestructura crítica, SCADA, regulación SEC). Para cada riesgo indica: activo afectado, vulnerabilidad que lo origina, P, I, R=P×I y nivel de riesgo (Bajo/Medio/Alto/Crítico con colores). Incluye un mapa de calor ASCII y tabla de priorización. Los riesgos deben conectarse con los IDs de activos del archivo 05_activos."
 
 **Qué acepté:** La estructura de la tabla de riesgos con IDs consistentes, el mapa de calor ASCII, la conexión entre riesgos y activos del 05_activos.
 
@@ -77,7 +77,7 @@
 
 ## Reflexión Final sobre el Uso de IA
 
-El uso de Claude fue valioso para estructurar el análisis técnico y generar el contenido base de cada sección. Sin embargo, la IA por sí sola no puede:
+Fue clave para ayudar lo que tenia de estructurado con mis analisis previos a la ayuda de la IA, donde sin embargo, la IA por sí sola no puede:
 
 1. **Tomar las capturas de pantalla** — Eso requirió ejecutar los ataques en DVWA personalmente.
 2. **Verificar los scores CVSS** — Cada puntuación fue comprobada manualmente en la calculadora de FIRST.
